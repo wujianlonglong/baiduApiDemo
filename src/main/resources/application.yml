@@ -1,0 +1,8 @@
+server:
+  port: 8111
+
+
+
+baiduParameter:
+  url: http://api.map.baidu.com/geocoder/v2/
+  ak: 1QAGHYfyhajYuZQUQd01daY9m6VHVsdB
