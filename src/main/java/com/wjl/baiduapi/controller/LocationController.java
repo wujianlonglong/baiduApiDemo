@@ -1,26 +1,35 @@
 package com.wjl.baiduapi.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sun.deploy.util.StringUtils;
+import com.wjl.baiduapi.service.DbTestService;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 public class LocationController {
 
 
-    @Value("${baiduParameter.url}")
-    private String url;
+    @Autowired
+    private DbTestService dbTestService;
 
-    @Value("${baiduParameter.ak}")
-    private String ak;
 
     /**
      * 经纬度转换具体地址
+     *
      * @param lat
      * @param lng
      * @return
@@ -28,24 +37,39 @@ public class LocationController {
     @RequestMapping("/ltToAddress")
     public String ltToAddress(String lat, String lng) {
 
-        RestTemplate restTemplate = new RestTemplate();
-        Map<String, String> praMap = new HashMap<>();
-//        praMap.put("callback", "renderReverse");
-        praMap.put("location", lat + "," + lng);
-        praMap.put("output", "json");
-        praMap.put("pois", "1");
-        praMap.put("ak", ak);
-        url = url + "?ak={ak}&location={location}&output={output}&pois={pois}";
-        String res = restTemplate.getForObject(url, String.class, praMap);
-        JSONObject jsonObject = JSONObject.parseObject(res);
-        JSONObject result = jsonObject.getJSONObject("result");
-        JSONObject location = result.getJSONObject("location");
-        JSONObject addressComponent = result.getJSONObject("addressComponent");
-        String country = addressComponent.getString("country");
-        String province = addressComponent.getString("province");
-        String city = addressComponent.getString("city");
 
-        return res.toString();
+        List<String> list = new ArrayList<String>();
+        list.add("first");
+        list.add("second");
+        list.add("third");
+
+        String join = StringUtils.join(list, ",");
+        return join;
+    }
+
+
+    @GetMapping("/dbTest")
+    public String dbTest() {
+        dbTestService.dbTest();
+        return "1";
+    }
+
+    @GetMapping("/reportData")
+    public String reportData(HttpServletResponse response) throws IOException {
+        Workbook workbook=dbTestService.reportData();
+        response.reset();
+        // 指定下载的文件名
+        response.setHeader("Content-Disposition", "attachment;filename=" + new String("用户设备表".getBytes("gb2312"), "ISO8859-1") + ".xlsx");
+        response.setContentType("application/vnd.ms-excel;charset=UTF-8");
+//        response.setHeader("Pragma", "no-cache");
+//        response.setHeader("Cache-Control", "no-cache");
+//        response.setDateHeader("Expires", 0);
+        OutputStream outputStream = response.getOutputStream();
+        workbook.write(outputStream);
+        outputStream.close();
+
+
+        return "1";
     }
 
 }
