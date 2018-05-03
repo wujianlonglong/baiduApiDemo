@@ -1,23 +1,17 @@
 package com.wjl.baiduapi.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.sun.deploy.util.StringUtils;
 import com.wjl.baiduapi.service.DbTestService;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class LocationController {
@@ -43,7 +37,7 @@ public class LocationController {
         list.add("second");
         list.add("third");
 
-        String join = StringUtils.join(list, ",");
+       String join= String.join(",",list);
         return join;
     }
 

@@ -2,7 +2,6 @@ package com.wjl.baiduapi.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.deploy.util.StringUtils;
 import com.wjl.baiduapi.dao.DbTestDao;
 import com.wjl.baiduapi.domain.AddressDetail;
 import com.wjl.baiduapi.model.ReportData;
@@ -17,8 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +54,7 @@ public class DbTestService {
 
 
     public String baiduAddress(List<String> sub) {
-        String jionstr = StringUtils.join(sub, "|");
+        String jionstr = String.join("|",sub);
         Map<String, String> praMap = new HashMap<>();
         praMap.put("location", jionstr);
         praMap.put("output", "json");
